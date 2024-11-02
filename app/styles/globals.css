@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #d9effc;
+  --foreground: #171717;
+}
+/*
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+*/
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.ellipse-1 {
+  position: absolute;
+  top: -32vh;
+  left: -15vw;
+  width: 30vw; /* 椭圆的宽度 */
+  height: 64vh; /* 椭圆的高度 */
+  background-color: #4f8fff; /* 椭圆的颜色 */
+  border-radius: 50%; /* 设置为圆角，使其成为椭圆 */
+  animation: rotate 15s linear infinite; /* 旋转动画 */
+  overflow: hidden;
+}
+
+.ellipse-2 {
+  position: fixed;
+  bottom: -64vh;
+  right: -30vw;
+  width: 60vw; /* 椭圆的宽度 */
+  height: 128vh; /* 椭圆的高度 */
+  background-color: #152ca6; /* 椭圆的颜色 */
+  border-radius: 50%; /* 设置为圆角，使其成为椭圆 */
+  animation: rotate 15s linear infinite; /* 旋转动画 */
+  overflow: hidden;
+}
+
+
+/* 定义旋转动画 */
+@keyframes rotate {
+  from {
+      transform: rotate(0deg); /* 起始角度 */
+  }
+  to {
+      transform: rotate(360deg); /* 结束角度 */
+  }
+}
