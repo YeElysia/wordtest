@@ -62,11 +62,8 @@ export default function Login() {
         <div className="Login justify-center">
           <div className="flex min-h-full min-w-full flex-1 flex-col justify-center px-4 py-12 lg:px-6">
             <div className="sm:mx-auto sm:w-full sm:max-w-lg mb-4">
-              <h2 className="text-center text-4xl/9 font-bold tracking-tight text-[#1935ca] mb-4">
-                Login to your Account
-              </h2>
-              <h2 className="text-1xl/9 tracking-tight text-[#1935ca]">
-                with your registered Email Address
+              <h2 className="text-center text-4xl/9 font-bold tracking-tight text-[#1935ca]">
+                Sign up to your account
               </h2>
             </div>
 
@@ -133,7 +130,7 @@ export default function Login() {
                     type="submit"
                     className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   >
-                    Login
+                    Sign up
                   </button>
                 </div>
               </form>
