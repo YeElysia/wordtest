@@ -15,17 +15,17 @@ model Problem{
   stem String?
   options Option[] @relation("Options")
   answers String
-  answerRule string
+  answerRule String
   subProblem Problem[] @relation("SubProblem")
-  domId number?
-  dom Problem? @relation("SubProblem", fields: [domId], reference: [dom])
+  domId Int?
+  dom Problem? @relation("SubProblem", fields: [domId], references: [id])
 }
 
 model Option{
   id Int @id @default(autoincrement())
-  content String[]
+  content String
   stemId Int
-  stem Problem @relation("Options", fields: [stemId], reference: [stem])
+  stem Problem @relation("Options", fields: [stemId], references: [id])
 }
 generator client {
   provider = "prisma-client-js"
