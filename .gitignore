@@ -39,3 +39,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 interface.md
+
+#prisma
+/prisma/migrations
+/prisma/migrations/**/*
