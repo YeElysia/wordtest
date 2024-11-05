@@ -13,11 +13,20 @@ model User{
 model Problem{
   id Int @id @default(autoincrement())
   stem String?
-  options String[]
-  answer String[]
-  subProblem Problem[]
+  options Option[] @relation("Options")
+  answers String
+  answerRule string
+  subProblem Problem[] @relation("SubProblem")
+  domId number?
+  dom Problem? @relation("SubProblem", fields: [domId], reference: [dom])
 }
 
+model Option{
+  id Int @id @default(autoincrement())
+  content String[]
+  stemId Int
+  stem Problem @relation("Options", fields: [stemId], reference: [stem])
+}
 generator client {
   provider = "prisma-client-js"
 }
