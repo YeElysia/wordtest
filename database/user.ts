@@ -1,10 +1,8 @@
 import * as sql from '@prisma/client'
 
-import {checkPassword} from '../frontEnd/xxx.ts'
-//读入与日志
 const prisma=new sql.PrismaClient();
 
-class User
+export class User
 {
     protected name:string;
     protected password:string;
@@ -15,7 +13,11 @@ class User
     }
     //注册
 
-    //验证
-
+    async isPasswordRight(name:string,passowrd:string):Promise<number>
+    {
+        const findUser=await prisma.user.findMany({where:{name:String(name)}});
+        if(findUser.length===0) return 2;//用户不存在 
+        return findUser[0].password==passowrd?1:0;
+    }
 
 }
