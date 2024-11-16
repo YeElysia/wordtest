@@ -64,7 +64,7 @@ export class ProblemDB{
       )
     })
   }
-  async answerCheck(checkList: {id : number, answer : string}){ // 检查特定ID题目的答案
+  async answerCheck(checkList: {id : number, answer : string}[]){ // 检查特定ID题目的答案
     return checkList.map(async (val:{id : number, answer : string})=>{
       const ans=await prisma.problem.findUnique(
 	{
