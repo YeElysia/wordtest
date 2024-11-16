@@ -1,3 +1,5 @@
+//可以用这个测试
+
 import * as DB from "./database/problemDB.ts"
 
 import * as fs from 'fs';
