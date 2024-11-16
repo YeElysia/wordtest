@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-type ProblemType= {
+type ProblemType= { //内部问题类型格式
       type:string,
       stem?:string,
       options?: string[],
@@ -8,8 +8,8 @@ type ProblemType= {
       answerRule? : string,
     subProblem? :ProblemSeq}
 export class ProblemDB{
-  create(problem:ProblemClass):any{
-    return prisma.problem.create(
+  async create(problem:ProblemClass){ //创建一个问题
+    return (await prisma.problem.create(
       {
 	data: {
 	  stem : problem.element.stem,
@@ -20,14 +20,24 @@ export class ProblemDB{
 	    create : problem.element.options?.map(
 	      (value,index)=>{
 		return {optionId : index, content : value}
-	      })
+	      })??undefined
 	  },
 	  subProblem :{
-	    connect : problem.element.subProblem?.element.map(this.create)
+	    connect : problem.element.subProblem?.element.map(this.create)??undefined
 	  }
 	}
       }
-    );
+    ));
+  }
+  async randomFind(type : string ,length : number,domId? : number){
+    return await prisma.problem.findMany({where : {problemType : type, domId: domId??undefined},orderBy : prisma.$queryRaw `random()`,take : length})
+  }
+  async list(type : string){
+    return await prisma.problem.findMany({where :{problemType : type}})
+  }
+  async delete(id:number){
+    (await prisma.problem.findMany({where : {domId : id}})).forEach((val)=>this.delete(val.id))
+    await prisma.problem.delete({where: {id : id}})
   }
 }
 export class ProblemClass{
@@ -43,7 +53,7 @@ export class ProblemClass{
 }
 export class ProblemSeq{
   element : ProblemClass[] = [];
-  constructor(length : number){
-
+  constructor(element: ProblemClass[]){
+    this.element=element;
   }
 }
