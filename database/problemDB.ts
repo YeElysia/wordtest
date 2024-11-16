@@ -29,13 +29,13 @@ export class ProblemDB{
       }
     ));
   }
-  async randomFind(type : string ,length : number,domId? : number){
+  async randomFind(type : string ,length : number,domId? : number){ //随机选择特定类型的问题
     return await prisma.problem.findMany({where : {problemType : type, domId: domId??undefined},orderBy : prisma.$queryRaw `random()`,take : length})
   }
   async list(type : string){
     return await prisma.problem.findMany({where :{problemType : type}})
   }
-  async delete(id:number){
+  async delete(id:number){ //删除特定id的问题
     (await prisma.problem.findMany({where : {domId : id}})).forEach((val)=>this.delete(val.id))
     await prisma.problem.delete({where: {id : id}})
   }
