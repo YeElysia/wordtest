@@ -1,5 +1,5 @@
 import * as sql from '@prisma/client'
-
+import {ProblemSeq} from './problemDB.ts'
 const prisma=new sql.PrismaClient();
 
 //记录单个用户的类，目前功能：注册，登录
@@ -36,4 +36,15 @@ export class User
         return findUser[0].password==password?1:0;
     }
 
+    //选择题目
+    async chooseProblem(num:number):Promise<ProblemSeq>
+    {
+        let promblemSeq:ProblemSeq;
+        while(num)
+        {
+            num-=1;
+            let x:number=Math.ceil(Math.random()*100);
+            
+        }
+    }
 }

@@ -1,7 +1,7 @@
-export function isRight(ans:string,trueAns:string,rule:string){
+export function isRight(ans:string,trueAns:string,rule:string):boolean{
   switch (rule){
     case "Unique":
-      return ans = trueAns;
+      return ans === trueAns;
     default:
       return true;
   }

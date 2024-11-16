@@ -33,19 +33,36 @@ export class ProblemDB{
       }
     ));
   }
-  async randomFindId(type : string ,length : number){ //随机选择特定类型的问题，返回ID
-    return (await prisma.problem.findMany(
-      {
-	select : {
-	  id : true
-	},
-	where : {problemType : type},
-	orderBy : await prisma.$queryRaw `random()`,
-	take : length
-      })).map((value)=>{return value.id})
-  }
+  async randomFindId(type:string, length:number) {
+    const totalCount = await prisma.problem.count({
+        where: { problemType: type }
+    });
+
+    const randomOffsets = Array.from({ length }, () => 
+        Math.floor(Math.random() * totalCount)
+    );
+
+    const results = [];
+    let bo:boolean[]=new Array(totalCount+1).fill(true);
+    for (const offset of randomOffsets) {
+        const [problem] = await prisma.problem.findMany({
+            select: { id: true },
+            where: { problemType: type },
+            take: 1,
+            skip: offset
+        });
+        if (problem&&bo[problem.id])
+        {
+          results.push(problem.id);
+          bo[problem.id]=false;
+        }
+    }
+
+    return results;
+}
+
   async problemFind(idList : number[]){ //返回ID列表的题目（不含答案）
-    return idList.map(async (id)=>{
+    return await Promise.all(idList.map(async (id)=>{
       return await prisma.problem.findUnique(
 	{
 	  select : {
@@ -61,10 +78,10 @@ export class ProblemDB{
 	  where : {id : id}
 	}
       )
-    })
+    }))
   }
   async answerCheck(checkList: {id : number, answer : string}[]){ // 检查特定ID题目的答案
-    return checkList.map(async (val:{id : number, answer : string})=>{
+    return await Promise.all(checkList.map(async (val:{id : number, answer : string})=>{
       const ans=await prisma.problem.findUnique(
 	{
 	  select : {
@@ -75,7 +92,7 @@ export class ProblemDB{
 	}
       )
       return isRight(val.answer,ans?.answers??"",ans?.answerRule??"")
-    })
+    }))
   }
     /**
   async delete(id:number){ //删除特定id的问题
