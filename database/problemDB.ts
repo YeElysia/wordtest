@@ -2,7 +2,6 @@ import { PrismaClient } from "@prisma/client";
 import { isRight } from "./answerRule";
 const prisma = new PrismaClient();
 export type ProblemType= { //内部问题类型格式
-  id :number,
   problemType:string,
   stem?:string,
   options?: string[],
@@ -12,16 +11,16 @@ export type ProblemType= { //内部问题类型格式
 }
 
 export class ProblemDB{
-  async create(problemType:string,stem:string,options:string[],answers:string,answerRule?:string){ //创建一个问题
+  async create(problem: ProblemType){ //创建一个问题
     return (await prisma.problem.create(
       {
 	data: {
-	  problemType : problemType,
-	  stem : stem,
-	  answers: answers,
-	  answerRule: answerRule??"Unique",
+	  problemType : problem.problemType,
+	  stem : problem.stem,
+	  answers: problem.answers??"",
+	  answerRule: problem.answerRule??"Unique",
 	  options :{
-	    create : options.map(
+	    create : problem.options?.map(
 	      (value,index)=>{
 		return {optionId : index, content : value}
 	      })
