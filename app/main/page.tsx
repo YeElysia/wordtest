@@ -47,7 +47,7 @@ const CreateProblem: React.FC = (onSubmit) => {
             <button type="submit">Create Problem</button>
         </form>
         <p>{response}</p>
-        
+
         </>
     );
 };
@@ -59,5 +59,5 @@ export default function Problem() {
             <h1>Create Problem</h1>
             <CreateProblem />
         </div>
-    );
+    )
 }
