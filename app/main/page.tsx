@@ -1,6 +1,4 @@
 'use client';
-
-import { createProblem, answerCheck, problemFind, randomFindId } from "../api/problem";
 import { useState } from 'react';
 
 
@@ -16,16 +14,20 @@ const CreateProblem: React.FC = (onSubmit) => {
         e.preventDefault();
         try {
             // const result = await createProblem({ problemType, stem, answers, answerRule, options, subProblem });
-            const result = await fetch('/api/problem', {
+            const result = await fetch('/api/problem/createproblem', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ problemType, stem, answers, answerRule, options }),
-            }).then((res) => res.json());
-            console.log(result);
+                body: JSON.stringify({ problemType, stem, options, answers, answerRule }),
+            })
+            if (!result.ok) {
+                throw new Error('Network response was not ok');
+              }
+              const data = await result.json();
+              console.log(data);
         } catch (error) {
-            console.error('Failed to create problem', error);
+            console.error('Failed to create problem', error.message);
         }
     };
 

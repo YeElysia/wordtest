@@ -43,3 +43,4 @@ interface.md
 #prisma
 /prisma/migrations
 /prisma/migrations/**/*
+.env
