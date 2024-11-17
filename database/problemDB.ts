@@ -16,7 +16,7 @@ export type ProblemType = {
 
 export class ProblemDB {
   async create(problem: ProblemType) { //创建一个问题
-    return (await prisma.problem.create(
+    await prisma.problem.create(
       {
         data: {
           problemType: problem.problemType,
@@ -35,7 +35,7 @@ export class ProblemDB {
           //}
         }
       }
-    ));
+    );
   }
   async randomFindId(type: string, length: number) { //随机选择特定类型的问题，返回ID
     return (await prisma.problem.findMany(
