@@ -60,7 +60,7 @@ export default function Login() {
         <div className="ellipse-1 -z-50"></div>
         <div className="ellipse-2 -z-50"></div>
         <div className="Login justify-center">
-          <div className="flex min-h-full min-w-full flex-1 flex-col justify-center px-4 py-12 lg:px-6">
+          <div className="flex min-h-full min-w-full flex-1 flex-col justify-center px-4 py-16 lg:px-6">
             <div className="sm:mx-auto sm:w-full sm:max-w-lg mb-4">
               <h2 className="text-center text-4xl/9 font-bold tracking-tight text-[#1935ca] mb-4">
                 Login to your Account
@@ -72,7 +72,7 @@ export default function Login() {
 
             <div className="flex flex-col justify-center mt-10 sm:mx-auto sm:w-full sm:max-w-lg">
               <form action="#" method="POST" onSubmit={handleSubmit} className="space-y-6">
-                <div>
+                <div className='wfull'>
                   <label htmlFor="email" className="block text-sm/6 font-medium text-[#696F79]">
                     Your Email Address *
                   </label>
