@@ -1,63 +1,55 @@
 'use client';
-import { useState } from 'react';
+
+import CreateProblem from './components/CreateProblem';
+import { ProblemType, ProblemDB} from '@/database/problemDB';
 
 
-const CreateProblem: React.FC = (onSubmit) => {
-    const [problemType, setProblemType] = useState('');
-    const [stem, setStem] = useState('');
-    const [answers, setAnswers] = useState('');
-    const [answerRule, setAnswerRule] = useState('');
-    const [options, setOptions] = useState('');
-    const [response, setResponse] = useState('');
-    // const [subProblem, setSubProblem] = useState('');
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        try {
-            // const result = await createProblem({ problemType, stem, answers, answerRule, options, subProblem });
-            const res = await fetch('/api/problem/createproblem', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ problemType, stem, answers, answerRule }),
-            });
-            const data = await res.json();
-            if (data.success) {
-                setResponse(`success`);
-            } else {
-                setResponse('Failed to create user');
-            }
-        } catch (error) {
-            console.error('Failed to create problem', error.message);
-        }
-    };
+import React from 'react';
+import Problem from './components/Problem';
 
-    return (
-        <>
-        <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center h-screen gap-4">
-            
-            <input type="text" value={problemType} onChange={(e) => setProblemType(e.target.value)} />
-            <input type="text" value={stem} onChange={(e) => setStem(e.target.value)} />
-            <input type="text" value={answers} onChange={(e) => setAnswers(e.target.value)} />
-            <input type="text" value={answerRule} onChange={(e) => setAnswerRule(e.target.value)} />
-            <input type="text" value={options} onChange={(e) => setOptions(e.target.value )} />
-            {// <input type="text" value={subProblem} onChange={(e) => setSubProblem(e.target.value)} />
-            }
-            <button type="submit">Create Problem</button>
-        </form>
-        <p>{response}</p>
+export default function ProblemPage() {
+  
+  const problems: ProblemType[] = [
+    {
+      problemType: '选择题',
+      stem: '下面哪个是 JavaScript 的关键字？',
+      options: ['function', 'div', 'table', 'span'],
+      answers: 'function',
+    },
+    {
+      problemType: '填空题',
+      stem: 'React 是由 ___ 公司开发的。',
+      answers: 'Facebook',
+      answerRule: '请填写正确的公司名称。',
+    },
+  ];
+  const problem_type = 'completion';
 
-        </>
-    );
-};
+  try {
+    const respense = fetch('/api/problem/findproblem', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ type: problem_type, size: 2 }),
+    })
+
+    const idlist = respense.then((res) => res.json());
+    console.log(idlist);
+  } catch (error) {
+    console.error('Failed to find problem', error.message);
+  }
 
 
-export default function Problem() {
-    return (
-        <div>
-            <h1>Create Problem</h1>
-            <CreateProblem />
-        </div>
-    )
+
+  const handleAnswer = (isCorrect: boolean, userAnswer: string) => {
+    console.log(`用户答案: ${userAnswer}, 是否正确: ${isCorrect}`);
+  };
+
+  return (
+    <div className="max-w-3xl mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-6">问题列表</h1>
+    </div>
+  );
 }
