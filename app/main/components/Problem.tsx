@@ -1,88 +1,55 @@
-import React, { useState } from 'react';
+import * as api from '../api';
+import React from 'react';
 
-const Problem: React.FC = () => {
-  const [userAnswer, setUserAnswer] = useState(''); // 用户输入的答案
-  const [isCorrect, setIsCorrect] = useState<boolean | null>(null); // 判断答案是否正确
+async function FindProblem(id: number) {
+  const repFindProblem = await api.wordtestConnector("find problem", [{ id }])
+  return repFindProblem[0].stem
+}
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserAnswer(e.target.value);
-  };
-  const checkAnswer = () => {
-    /*
-    if (userAnswer === problemdb.answerCheck([{id: 1, answer: 'Facebook'}])) {
-      const correct = problem.answers.trim().toLowerCase() === userAnswer.trim().toLowerCase();
-      setIsCorrect(correct);
-      if (onAnswer) {
-        onAnswer(correct, userAnswer);
-      }
-    }*/
-    try {
-      const res = fetch('/api/problem/answercheck', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id: 1, answer: userAnswer }),
-      });
-    }
- catch (error) {
-    console.error('Failed to check answer', error.message);
-  }
-};
+function StemProblem({ stem }: { stem: string }) {
+  let count = 1;
+  const formattedStem = stem.replace(/_+/g, (match) => {
+    return `<span class="font-bold">${count++}.______</span>`;
+  });
 
   return (
-    <div className="border rounded-lg p-4 bg-gray-50 shadow-md mb-4">
-      {/* 题干 */}
-      {problem.stem && <p className="font-bold text-lg mb-4">{problem.stem}</p>}
+    <p className="text-gray-700 mb-6" dangerouslySetInnerHTML={{ __html: formattedStem }} />
+  );
+}
 
-      {/* 填空题 */}
-      {problem.problemType === '填空题' && (
-        <div className="space-y-2">
-          <input
-            type="text"
-            value={userAnswer}
-            onChange={handleInputChange}
-            placeholder="请输入答案"
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          />
-          <button
-            onClick={checkAnswer}
-            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-          >
-            提交答案
-          </button>
 
-          {/* 判断结果 */}
-          {isCorrect === true && (
-            <p className="text-green-500 font-semibold">答案正确！</p>
-          )}
-          {isCorrect === false && (
-            <p className="text-red-500 font-semibold">答案错误，请再试一次。</p>
-          )}
-        </div>
-      )}
+const Problem: React.FC<{problemid: number}> = ({ problemid }) => {
+  const [problemstem, setProblemstem] = React.useState<string>('');
 
-      {/* 选项（选择题） */}
-      {problem.problemType === '选择题' && problem.options && (
-        <ul className="space-y-2">
-          {problem.options.map((option, index) => (
-            <li key={index}>
-              <button
-                onClick={() => onAnswer?.(option === problem.answers, option)}
-                className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-              >
-                {option}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+  const [answer, setAnswer] = React.useState<string>('');
+  const [inputclass, setInputclass] = React.useState<string>('w-full px-4 py-2 border border-gray-300 rounded-md');
 
-      {/* 答案规则 */}
-      {problem.answerRule && (
-        <p className="text-sm text-gray-500 italic mt-4">{problem.answerRule}</p>
-      )}
+  FindProblem(problemid).then((problemstem) => setProblemstem(problemstem));
+
+  return (
+    <div className='flex flex-col'>
+    <div className="bg-white p-6 rounded-t-[36px] shadow-md my-4">
+      <h2 className="text-xl font-semibold mb-4">Problem One</h2>
+      <ol>
+        <li>
+          <StemProblem stem={problemstem} />
+        </li>
+      </ol>
     </div>
+    <div className="bg-white p-6 rounded-b-[36px] shadow-md my-4">
+      <h3 className="text-lg font-semibold mb-2">Your Answer</h3>
+      <div className="grid grid-cols-3 gap-4">
+        {[...Array(problemstem.split('_').length - 1)].map((_, i) => (
+          <input
+            key={i}
+            type="text"
+            placeholder={`${i + 1}.`}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md"
+          />
+        ))}
+      </div>
+    </div>
+  </div>
   );
 };
 

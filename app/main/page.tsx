@@ -2,19 +2,30 @@
 import * as api from './api';
 import React from 'react';
 import Unit from './components/Unit';
+import Problem from './components/Problem';
 
-async function test(){
-  const repGetId=await api.wordtestConnector("get problem id",{problemType : "text",length: 1})
+async function test() {
+  const repGetId = await api.wordtestConnector("get problem id", { problemType: "text", length: 1 })
   console.log(repGetId);
-  const repFindProblem=await api.wordtestConnector("find problem", repGetId)
+  const repFindProblem = await api.wordtestConnector("find problem", repGetId)
   console.log(repFindProblem)
-  const repCheckAns=await api.wordtestConnector("check answer", [{id : repGetId[0].id,answer : "intend"}])
+  const repCheckAns = await api.wordtestConnector("check answer", [{ id: repGetId[0].id, answer: "intend" }])
   console.log(repCheckAns)
 }
+async function GetId() {
+  const repGetId = await api.wordtestConnector("get problem id", { problemType: "text", length: 1 })
+  return repGetId[0].id;
+}
+
 
 export default function Home() {
-   // test(); 
   const [selectkey, setSelectkey] = React.useState<number>(1);
+  const [id, setId] = React.useState<number>(0);
+
+  React.useEffect(() => {
+    GetId().then((id) => setId(id));
+  }, []);
+
 
   const handleUnitClick = (unitkey: number) => {
     setSelectkey(unitkey);
@@ -38,62 +49,9 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col px-8 py-6">
-        {/* Top Bar */}
-        <div className="flex justify-between items-center mb-6">
-          <input
-            type="text"
-            placeholder="Search"
-            className="w-1/3 px-4 py-2 border border-gray-300 rounded-md"
-          />
-        </div>
 
         {/* Reading Section */}
-        <div className='flex flex-col'>
-          <div className="bg-white p-6 rounded-[36px] shadow-md my-4 ">
-            <h2 className="text-xl font-semibold mb-4">Reading One</h2>
-            <p className="text-gray-700 mb-6">
-              We the <span className="font-bold">1.______</span> take no pride in our
-              educational achievement with you. We have prepared you for a world
-              that does not exist, indeed, that cannot exist. You have spent four
-              years supposing that failure leaves no record. You have learned at
-              Brown that when your work goes poorly, the painless solution is to
-              drop out. But starting now, in the world to which you go, failure
-              marks you. <span className="font-bold">2._____</span> difficulty by
-              quitting leaves you changed. Outside Brown,{' '}
-              <span className="font-bold">3.______</span> are no heroes.
-            </p>
-            {/* Answer Section */}
-          </div>
-          <div className="bg-white p-6 rounded-[36px] shadow-md my-4">
-            <h3 className="text-lg font-semibold mb-2">Your Answer</h3>
-            <div className="grid grid-cols-3 gap-4">
-              <input
-                type="text"
-                placeholder="1."
-                className="w-full px-4 py-2 border border-gray-300 rounded-md"
-              />
-              <input
-                type="text"
-                placeholder="2."
-                className="w-full px-4 py-2 border border-gray-300 rounded-md"
-              />
-              <input
-                type="text"
-                placeholder="3."
-                className="w-full px-4 py-2 border border-gray-300 rounded-md"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Feedback Section */}
-      <div className="w-1/5 bg-white flex flex-col items-center p-6 mx-4 my-6 shadow-lg rounded-[60px]">
-        <h2 className="text-lg font-semibold mb-4 text-[#1935CA]">Feedback</h2>
-        <div className="space-y-4">
-          <div className="w-16 h-16 bg-green-500 rounded-md"></div>
-          <div className="w-16 h-16 bg-red-500 rounded-md"></div>
-        </div>
+        <Problem problemid={id} />
       </div>
     </div>
   );
