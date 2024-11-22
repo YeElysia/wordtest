@@ -19,6 +19,8 @@ async function GetId() {
 
 
 export default function Home() {
+  test();
+  
   const [selectkey, setSelectkey] = React.useState<number>(1);
   const [id, setId] = React.useState<number>(0);
 
