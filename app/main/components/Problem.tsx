@@ -1,8 +1,4 @@
 import React, { useState } from 'react';
-import { ProblemType, ProblemDB } from "@/database/problemDB";
-
-
-
 
 const Problem: React.FC = () => {
   const [userAnswer, setUserAnswer] = useState(''); // 用户输入的答案
@@ -11,8 +7,6 @@ const Problem: React.FC = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserAnswer(e.target.value);
   };
-
-  const problemdb = new ProblemDB();
   const checkAnswer = () => {
     /*
     if (userAnswer === problemdb.answerCheck([{id: 1, answer: 'Facebook'}])) {
