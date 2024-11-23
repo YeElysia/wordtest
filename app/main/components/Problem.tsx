@@ -1,6 +1,10 @@
 import * as api from '../api';
 import React from 'react';
+import Feedback from './Feedback';
 
+type QuestionStatus = { // 每题的唯一标识符
+  status: "wrong" | "correct" | "notAttempted"; // 状态的限定值
+};
 async function FindProblem(id: number) {
   const repFindProblem = await api.wordtestConnector("find problem", [{ id }]);
   return repFindProblem[0].stem;
@@ -24,27 +28,31 @@ function StemProblem({ stem }: { stem: string }) {
 }
 
 const Problem: React.FC<{ problemid: number }> = ({ problemid }) => {
+  // const [status, setStatus] = React.useContext<QuestionStatus[]>(ValueContext);
+
   const [problemstem, setProblemstem] = React.useState<string>('');
   React.useEffect(() => {
     FindProblem(problemid).then((stem) => setProblemstem(stem));
   }, [problemid]);
 
+
   // const [answer, setAnswer] = React.useState<string>('');
   const [inputclass, setInputclass] = React.useState<string>('');
-  const [isCorrect, setIsCorrect] = React.useState<boolean>(false);
+  const [status, setStatus] = React.useState<QuestionStatus>({status:"notAttempted"});
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const answer = e.target.value ;
 
     const isCorrect = await CheckAns(problemid, e.target.value);
-    setInputclass(isCorrect ? 'bg-green-100' : 'bg-red-100');
+    setInputclass(isCorrect? 'bg-green-100' : 'bg-red-100');
+    setStatus(isCorrect? {status:"correct"} : {status:"wrong"});
   };
 
 
   return (
     <div className='flex flex-col'>
       <div className="bg-white p-6 rounded-t-[36px] shadow-md my-4">
-        <h2 className="text-xl font-semibold mb-4">Problem One</h2>
+        <h2 className="text-xl font-semibold mb-4">{`Problem ${problemid}`}</h2>
         <ol>
           <li>
             <StemProblem stem={problemstem} />
@@ -63,6 +71,7 @@ const Problem: React.FC<{ problemid: number }> = ({ problemid }) => {
               className={`w-full px-4 py-2 border border-gray-300 rounded-md ${inputclass}`}
             />
           ))}
+          <Feedback questionStatus={status} />
         </div>
       </div>
     </div>
