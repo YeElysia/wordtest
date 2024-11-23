@@ -19,14 +19,16 @@ export default function Home() {
   // test();
 
   const [selectkey, setSelectkey] = React.useState<number>(1);
+  /*
   const [status, setStatus] = React.useState<QuestionStatus[]>(
     [{ status: "notAttempted" }, { status: "notAttempted" }
       , { status: "notAttempted" }, { status: "notAttempted" }
       , { status: "notAttempted" }, { status: "notAttempted" }
       , { status: "notAttempted" }, { status: "notAttempted" }
     ]);
+  */
 
-    const ValueContext = React.createContext<QuestionStatus[]>([]);
+  // const ValueContext = React.createContext<QuestionStatus[]>([]);
   //const [id, setId] = React.useState<number>(0);
   /*
   React.useEffect(() => {
@@ -36,8 +38,9 @@ export default function Home() {
   const handleUnitClick = (unitkey: number) => {
     setSelectkey(unitkey);
   };
-
-
+  
+  
+  
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
@@ -49,7 +52,6 @@ export default function Home() {
             {[...Array(8)].map((_, i) => (
               <div key={i}>
               <Unit unitkey={i + 1} selectkey={selectkey} onClick={() => handleUnitClick(i + 1)} />
-              <Feedback questionStatus={status[i]} />
               </div>
             ))}
           </ul>
@@ -60,11 +62,9 @@ export default function Home() {
       <div className="flex-1 flex flex-col px-8 py-6">
 
         {/* Reading Section */}
-        <ValueContext.Provider value={status}>
         <Problem problemid={selectkey} />
-        </ValueContext.Provider>
 
       </div>
     </div>
   );
-}
+  };
